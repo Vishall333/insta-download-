@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram Video Downloader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #121212;
+      --fg: #ffffff;
+      --accent: #1e90ff;
+      --error: #ff5555;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+
+    input {
+      padding: 12px;
+      width: 90%;
+      max-width: 400px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0066cc;
+    }
+
+    #result {
+      margin-top: 30px;
+    }
+
+    img {
+      border-radius: 10px;
+      max-width: 90%;
+      height: auto;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: #00c851;
+      padding: 10px 20px;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background-color: #007e33;
+    }
+
+    .error {
+      color: var(--error);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Instagram Video Downloader</h1>
+  <input type="text" id="igUrl" placeholder="Paste Instagram link here">
+  <button onclick="fetchInstagramVideo()">Download</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function fetchInstagramVideo() {
+      const instagramUrl = document.getElementById('igUrl').value.trim();
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (!instagramUrl || !instagramUrl.inc0ludes("instagram.com")) {
+        resultDiv.innerHTML = `<div class="error">Please enter a valid Instagram URL.</div>`;
+        return;
+      }
+
+      try {
+        const apiUrl = `https://downloadgram.org/api/download?url=${encodeURIComponent(url)}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.url.status) {
+          const videoUrl = data.url.data[0].url;
+          const thumbnail = data.url.data[0].thumbnail;
+
+          resultDiv.innerHTML = `
+            <img src="${thumbnail}" alt="Thumbnail"><br>
+            <a href="${videoUrl}" download target="_blank">Download Video</a>
+          `;
+        } else {
+          resultDiv.innerHTML = `<div class="error">Video not found. Please check the link.</div>`;
+        }
+      } catch (err) {
+        console.error(err);
+        resultDiv.innerHTML = `<div class="error">Error fetching video.</div>`;
+      }
+    }
+  </script>
+
+</body>
+</html>
